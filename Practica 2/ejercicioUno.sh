@@ -1,35 +1,27 @@
+#!/bin/bash
+
 # Ejercicio 1: Comando tac
-# a) Interpretar la página de manual del comando cat, realizar pruebas del comando
-# b) Crear un script que imprima el contenido de un archivo de texto de manera invertida, es
-# decir primero la última línea, luego la penúltima y así sucesivamente hasta imprimir en
-# último lugar la primer línea.
-# Nota: existen muchas formas de realizar esto, pueden ser útiles los comandos head y tail-
 
-# Si no se pasa exactamente 1 argumento (el archivo) → mostrar uso y salir
+# --- 1. Validar argumentos ---
 if [ $# -ne 1 ]; then
-  echo "Uso: $0 archivo.txt"
-  exit 1
+    echo "Uso: $0 archivo.txt"
+    exit 1
 fi
 
-archivo="$1"   # el nombre del archivo viene como primer argumento
-
-# Verificar que el archivo exista
+# --- 2. Verificar que el archivo exista ---
+archivo="$1"
 if [ ! -f "$archivo" ]; then
-  echo "Error: el archivo '$archivo' no existe."
-  exit 1
+    echo "Error: el archivo '$archivo' no existe."
+    exit 1
 fi
 
-# ------------------------------
-# LÓGICA PARA INVERTIR EL ARCHIVO
-# ------------------------------
-
-# Contar cuántas líneas tiene el archivo con wc -l
+# --- 3. Contar líneas del archivo ---
 lineas=$(wc -l < "$archivo")
 
-# Bucle que va desde la última línea (lineas) hasta la primera (1)
+# --- 4. Imprimir archivo invertido ---
+# Bucle que va desde la última línea hasta la primera
 for i in $(seq "$lineas" -1 1); do
-  # head -n $i → muestra las primeras $i líneas
-  # tail -n 1 → se queda con la última de esas $i
-  # Resultado: la línea número $i
-  head -n "$i" "$archivo" | tail -n 1
+    # head -n $i obtiene las primeras $i líneas
+    # tail -n 1 se queda con la última de esas líneas
+    head -n "$i" "$archivo" | tail -n 1
 done
